@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Except
@@ -9,6 +10,7 @@ namespace Except
         {
             
             var nums = GetArrayFromFile("path.txt");
+            
         }
 
 
@@ -18,21 +20,28 @@ namespace Except
             {
                 string content = File.ReadAllText(path);
                 var numString = content.Split(" ");
-                int[] nums = new int[numString.Length];
+                List<int> nums = new List<int>();
 
                 for (int i = 0; i < numString.Length; i++)
                 {
-                    try
-                    {
-                        int num = Int32.Parse(numString[i]);
-                        nums[i] = num;
-                    }
-                    catch (Exception) 
-                    {
-                        Console.WriteLine("В массиве есть не число");
-                    }
+                    int num;
+                    if (Int32.TryParse(numString[i], out num))
+                        nums.Add(num);
+
+                    //try
+                    //{
+                    //    int num = Int32.Parse(numString[i]);
+                    //    nums.Add(num);
+                    //}
+                    //catch (Exception) 
+                    //{
+                    //    Console.WriteLine("В массиве есть не число");
+                    //}
                 }
-                return nums;
+
+                
+
+                return nums.ToArray();
             }
             catch(Exception ex)
             {
