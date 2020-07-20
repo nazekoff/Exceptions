@@ -7,33 +7,39 @@ namespace Except
     {
         static void Main(string[] args)
         {
-            var r = GetRowCount("C:/Path/file.txt");
-            Console.WriteLine(r);
+            
+            var nums = GetArrayFromFile("path.txt");
         }
 
-        static int GetRowCount(string path)
+
+        static int[] GetArrayFromFile(string path)
         {
             try
             {
-                var rows = File.ReadAllLines(path);
-                return rows.Length;
+                string content = File.ReadAllText(path);
+                var numString = content.Split(" ");
+                int[] nums = new int[numString.Length];
+
+                for (int i = 0; i < numString.Length; i++)
+                {
+                    try
+                    {
+                        int num = Int32.Parse(numString[i]);
+                        nums[i] = num;
+                    }
+                    catch (Exception) 
+                    {
+                        Console.WriteLine("В массиве есть не число");
+                    }
+                }
+                return nums;
             }
-            catch (FileNotFoundException ex)
+            catch(Exception ex)
             {
-                //Console.WriteLine($"Файл {path} не был найден. Alarm!");
-                Console.WriteLine(ex.Message);
-                return 0;
-            }
-            catch (ArgumentNullException ex)
-            {
-                Console.WriteLine("Функция была вызвана с пустым аргументом. Так делать не хорошо.");
-                return 0;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Не получилось считать файл");
-                return 0;
+                Console.WriteLine($"Не удалось считать содержимое файла {path}");
+                return new int[0];
             }
         }
+                        
     }
 }
